@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# El wrapper debe conservar saltos exactos: LF para el script sh (un CRLF rompe
+# bash con "$'\r': command not found") y CRLF para el .bat de Windows.
+gradlew text eol=lf
+gradlew.bat text eol=crlf

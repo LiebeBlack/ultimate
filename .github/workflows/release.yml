@@ -27,15 +27,23 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Gradle cache
+      - name: Gradle cache + validación de wrapper
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache: read-only
+          validate-wrappers: true
 
+      # El contexto `secrets` NO está disponible en `if:` de steps (rompe el
+      # parseo del workflow), así que la comprobación se hace en el shell.
       - name: Restaurar keystore desde secrets
-        if: ${{ secrets.KEYSTORE_B64 != '' }}
         env:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
           KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
         run: |
+          if [ -z "$KEYSTORE_B64" ] || [ -z "$KEYSTORE_PROPERTIES" ]; then
+            echo "Sin secrets de firma: el release saldrá SIN firmar."
+            exit 0
+          fi
           echo "$KEYSTORE_B64" | base64 -d > paylensu-release.jks
           printf '%s\n' "$KEYSTORE_PROPERTIES" > keystore.properties
 

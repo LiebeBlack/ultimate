@@ -22,8 +22,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Gradle cache
+      - name: Gradle cache + validación de wrapper
         uses: gradle/actions/setup-gradle@v4
+        with:
+          # CI solo lee la caché; el write lo hace el paso wrapper-validation.
+          cache: read-only
+          # Falla rápido y claro si falta o fue alterado el wrapper.
+          validate-wrappers: true
 
       - name: Unit tests (parser, Money, finanzas, carrito)
         run: ./gradlew testBundledOcrDebugUnitTest --stacktrace
