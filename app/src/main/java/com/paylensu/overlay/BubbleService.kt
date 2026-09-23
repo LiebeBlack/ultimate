@@ -206,8 +206,8 @@ class BubbleService : Service(), BubbleActions {
         if (expanding) snapToEdge()
     }
 
-    override fun onDrag(dx: Float, dy: Float) = mainHandler.post { reposition(dx, dy) }
-    override fun onDragEnd() = mainHandler.post { snapToEdge() }
+    override fun onDrag(dx: Float, dy: Float) { mainHandler.post { reposition(dx, dy) } }
+    override fun onDragEnd() { mainHandler.post { snapToEdge() } }
 
     override fun onToggleCamera() {
         val turningOn = !_state.value.cameraOn
