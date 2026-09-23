@@ -1,0 +1,65 @@
+name: Release
+
+# Disparo: push de tag v* (p.ej. v1.0.0) o manual desde la pestaña Actions.
+# Firma: secrets OPCIONALES
+#   - KEYSTORE_B64          → el .jks codificado en base64
+#                             (base64 -w0 paylensu-release.jks)
+#   - KEYSTORE_PROPERTIES   → el contenido de keystore.properties
+# Sin secrets el release sale SIN firmar (APK válido para pruebas).
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release firmado + GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Restaurar keystore desde secrets
+        if: ${{ secrets.KEYSTORE_B64 != '' }}
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 -d > paylensu-release.jks
+          printf '%s\n' "$KEYSTORE_PROPERTIES" > keystore.properties
+
+      - name: Unit tests
+        run: ./gradlew testBundledOcrDebugUnitTest
+
+      - name: Build release (AAB + APK bundled, APK thin)
+        run: |
+          ./gradlew :app:bundleBundledOcrRelease :app:assembleBundledOcrRelease
+          ./gradlew :app:assembleThinOcrRelease
+
+      - name: Preparar artefactos
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/bundle/bundledOcrRelease/app-bundledOcr-release.aab \
+             dist/PayLensU-${GITHUB_REF_NAME}-bundled.aab || true
+          cp app/build/outputs/apk/bundledOcr/release/app-bundledOcr-release.apk \
+             dist/PayLensU-${GITHUB_REF_NAME}-bundled.apk || true
+          cp app/build/outputs/apk/thinOcr/release/app-thinOcr-release.apk \
+             dist/PayLensU-${GITHUB_REF_NAME}-thin.apk || true
+          ls -la dist
+
+      - name: Publicar GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true

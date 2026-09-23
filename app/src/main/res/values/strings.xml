@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PayLens U</string>
+    <string name="bubble_channel_name">Burbuja PayLens</string>
+    <string name="bubble_notification_title">PayLens U activo</string>
+    <string name="bubble_notification_text">Toca la burbuja para calcular precios sin salir de tu app.</string>
+    <string name="action_scan">Escanear</string>
+    <string name="action_add_to_cart">+ Carrito</string>
+    <string name="action_open_bubble">Burbuja</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="action_retry">Reintentar</string>
+    <string name="tap_to_scan">Toca la retícula para escanear</string>
+    <string name="rate_label">Tasa BCV</string>
+    <string name="rate_manual_hint">Tasa manual (Bs por $1)</string>
+    <string name="rate_source_auto">Auto</string>
+    <string name="rate_source_manual">Manual</string>
+    <string name="rate_offline">Última tasa guardada</string>
+    <string name="iva_label">IVA %1$s incl.</string>
+    <string name="cart_items">%1$d items</string>
+    <string name="cart_empty">Carrito vacío</string>
+    <string name="cart_clear">Vaciar</string>
+    <string name="cart_undo">Deshacer</string>
+    <string name="cart_cleared">Carrito vaciado</string>
+    <string name="payment_cash">Efectivo $</string>
+    <string name="payment_mobile">Pago Móvil Bs.</string>
+    <string name="payment_change">Vuelto</string>
+    <string name="payment_optimal">Óptimo</string>
+    <string name="keypad_done">OK</string>
+    <string name="ocr_no_prices">Sin precios legibles — reintenta o usa el teclado</string>
+    <string name="ocr_engine_unavailable">Motor OCR no disponible: %1$s</string>
+    <string name="camera_permission_rationale">PayLens necesita la cámara para escanear precios.</string>
+    <string name="bubble_permission_rationale">Activa “Mostrar sobre otras apps” para la burbuja.</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_iva">IVA (%%)</string>
+    <string name="settings_threshold">Umbral $/Bs (sin símbolo)</string>
+</resources>

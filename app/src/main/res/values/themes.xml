@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash 0-overhead: fondo negro puro, sin imagen pesada. -->
+    <style name="Theme.PayLensU.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/oled_black</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_glyph</item>
+        <item name="postSplashScreenTheme">@style/Theme.PayLensU</item>
+    </style>
+
+    <!-- Base OLED: sin action bar, fondo negro absoluto, sin sombras de ventana. -->
+    <style name="Theme.PayLensU" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/oled_black</item>
+        <item name="android:statusBarColor">@color/oled_black</item>
+        <item name="android:navigationBarColor">@color/oled_black</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+</resources>

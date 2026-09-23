@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Glifo del splash: retícula neón con "$" estilizado. Stroke plano, sin blur. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- esquinas de retícula cian -->
+    <path
+        android:pathData="M30,42 L30,30 L42,30 M66,30 L78,30 L78,42 M78,66 L78,78 L66,78 M42,78 L30,78 L30,66"
+        android:strokeColor="#00F3FF"
+        android:strokeWidth="3" />
+    <!-- "$" púrpura -->
+    <path
+        android:pathData="M54,36 L54,72 M63,44 C63,40 59,38 54,38 C49,38 45,40 45,45 C45,57 63,51 63,63 C63,68 59,70 54,70 C49,70 45,68 45,64"
+        android:strokeColor="#9D00FF"
+        android:strokeWidth="4" />
+    <!-- línea de escaneo cian -->
+    <path
+        android:pathData="M36,54 L72,54"
+        android:strokeColor="#00F3FF"
+        android:strokeWidth="2" />
+</vector>
