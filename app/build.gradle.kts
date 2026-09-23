@@ -116,8 +116,10 @@ dependencies {
     implementation(libs.profileinstaller)
     implementation(libs.core.splashscreen)
 
-    bundledOcrImplementation(libs.mlkit.text.bundled)
-    thinOcrImplementation(libs.mlkit.text.thin)
+    // Los accessors de configuraciones por sabor (p.ej. bundledOcrImplementation) no
+    // existen al compilar el script en Kotlin DSL: hay que usar add("nombre", ...).
+    add("bundledOcrImplementation", libs.mlkit.text.bundled)
+    add("thinOcrImplementation", libs.mlkit.text.thin)
 
     debugImplementation(libs.compose.ui.tooling)
     testImplementation(libs.junit)

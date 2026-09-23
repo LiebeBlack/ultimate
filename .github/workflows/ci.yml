@@ -14,10 +14,10 @@ jobs:
     name: Tests + APKs (JDK 17)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: JDK 17 (Temurin)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -25,8 +25,6 @@ jobs:
       - name: Gradle cache + validación de wrapper
         uses: gradle/actions/setup-gradle@v4
         with:
-          # CI solo lee la caché; el write lo hace el paso wrapper-validation.
-          cache: read-only
           # Falla rápido y claro si falta o fue alterado el wrapper.
           validate-wrappers: true
 
@@ -45,7 +43,7 @@ jobs:
         run: ./gradlew :app:assembleThinOcrDebug
 
       - name: Upload APKs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: paylensu-apks
           path: |
