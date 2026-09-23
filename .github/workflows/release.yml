@@ -47,6 +47,10 @@ jobs:
           echo "$KEYSTORE_B64" | base64 -d > paylensu-release.jks
           printf '%s\n' "$KEYSTORE_PROPERTIES" > keystore.properties
 
+      # Igual que en CI: garantiza que ./gradlew sea ejecutable.
+      - name: Asegurar permisos de ejecución del wrapper
+        run: chmod +x gradlew
+
       - name: Unit tests
         run: ./gradlew testBundledOcrDebugUnitTest
 

@@ -30,6 +30,11 @@ jobs:
           # Falla rápido y claro si falta o fue alterado el wrapper.
           validate-wrappers: true
 
+      # El bit de ejecución se pierde al commitear desde Windows (NTFS no lo
+      # conserva); esto garantiza que ./gradlew sea ejecutable en Linux.
+      - name: Asegurar permisos de ejecución del wrapper
+        run: chmod +x gradlew
+
       - name: Unit tests (parser, Money, finanzas, carrito)
         run: ./gradlew testBundledOcrDebugUnitTest --stacktrace
 
