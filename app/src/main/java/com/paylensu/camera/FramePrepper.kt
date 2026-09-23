@@ -3,6 +3,7 @@ package com.paylensu.camera
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import androidx.camera.core.ImageProxy
+import java.nio.ByteBuffer
 
 /**
  * Normalización de frames: plano Y -> bitmap gris (r=g=b) + downscale a
@@ -14,7 +15,7 @@ object FramePrepper {
     const val MAX_DIM = 1080
 
     /** Nitidez barata: varianza del gradiente vertical sobre filas muestreadas. */
-    fun sharpness(y: ByteArray, width: Int, height: Int, rowStride: Int, pixelStride: Int): Long {
+    fun sharpness(y: ByteBuffer, width: Int, height: Int, rowStride: Int, pixelStride: Int): Long {
         var acc = 0L
         var count = 0L
         var prev = 0
@@ -23,7 +24,7 @@ object FramePrepper {
             val base = row * rowStride
             var x = 1
             while (x < width - 1) {
-                val v = y[base + x * pixelStride].toInt() and 0xFF
+                val v = y.get(base + x * pixelStride).toInt() and 0xFF
                 if (x > 1) {
                     val d = v - prev
                     acc += d.toLong() * d
@@ -43,7 +44,8 @@ object FramePrepper {
      */
     fun toGrayBitmap(image: ImageProxy): Bitmap {
         val yPlane = image.planes[0]
-        val buffer = yPlane.buffer.rewind()
+        val buffer = yPlane.buffer
+        buffer.rewind()
         val width = image.width
         val height = image.height
         val rowStride = yPlane.rowStride

@@ -3,11 +3,11 @@ package com.paylensu.overlay
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.SavedStateRegistry
-import androidx.lifecycle.SavedStateRegistryOwner
-import androidx.lifecycle.SavedStateRegistryController
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.savedstate.SavedStateRegistry
+import androidx.savedstate.SavedStateRegistryController
+import androidx.savedstate.SavedStateRegistryOwner
 
 /**
  * Ciclo de vida manual para la ComposeView de la burbuja (los servicios no

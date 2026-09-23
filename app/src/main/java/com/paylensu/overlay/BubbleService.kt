@@ -15,8 +15,8 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.WindowManager
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.setViewTreeLifecycleOwner
-import androidx.compose.ui.platform.setViewTreeSavedStateRegistryOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.camera.view.PreviewView
@@ -200,16 +200,16 @@ class BubbleService : Service(), BubbleActions {
 
     // ---------- Acciones desde la UI de la burbuja ----------
 
-    fun onToggleExpand() {
+    override fun onToggleExpand() {
         val expanding = !_state.value.expanded
         _state.update { it.copy(expanded = expanding) }
         if (expanding) snapToEdge()
     }
 
-    fun onDrag(dx: Float, dy: Float) = mainHandler.post { reposition(dx, dy) }
-    fun onDragEnd() = mainHandler.post { snapToEdge() }
+    override fun onDrag(dx: Float, dy: Float) = mainHandler.post { reposition(dx, dy) }
+    override fun onDragEnd() = mainHandler.post { snapToEdge() }
 
-    fun onToggleCamera() {
+    override fun onToggleCamera() {
         val turningOn = !_state.value.cameraOn
         _state.update { it.copy(cameraOn = turningOn, message = null) }
         if (!turningOn) {
@@ -236,7 +236,7 @@ class BubbleService : Service(), BubbleActions {
         }
     }
 
-    fun onScan() {
+    override fun onScan() {
         val s = _state.value
         if (s.scanning) return
         val rs = latestRate ?: run {
@@ -269,12 +269,12 @@ class BubbleService : Service(), BubbleActions {
         }
     }
 
-    fun onClose() = stopSelf()
+    override fun onClose() = stopSelf()
 
-    fun onSelectPrice(index: Int) = _state.update { it.copy(selected = index, selectedBillCents = null) }
+    override fun onSelectPrice(index: Int) = _state.update { it.copy(selected = index, selectedBillCents = null) }
 
     /** Cobra el precio seleccionado (misma fórmula que la app principal). */
-    fun onCharge() {
+    override fun onCharge() {
         val s = _state.value
         val rs = latestRate ?: run {
             _state.update { it.copy(message = "Sin tasa BCV guardada") }
@@ -305,8 +305,8 @@ class BubbleService : Service(), BubbleActions {
             _state.update { it.copy(message = "Cobro registrado ✓") }
         }
     }
-    fun onSelectBill(cents: Long?) = _state.update { it.copy(selectedBillCents = cents) }
-    fun onAddCart() {
+    override fun onSelectBill(cents: Long?) = _state.update { it.copy(selectedBillCents = cents) }
+    override fun onAddCart() {
         val s = _state.value
         val p = s.prices.getOrNull(s.selected) ?: return
         scope.launch {
@@ -314,7 +314,7 @@ class BubbleService : Service(), BubbleActions {
             _state.update { it.copy(message = "Añadido al carrito ✓") }
         }
     }
-    fun onOpenKeypad() {
+    override fun onOpenKeypad() {
         val s = _state.value
         val p = s.prices.getOrNull(s.selected)
         _state.update {
@@ -324,8 +324,8 @@ class BubbleService : Service(), BubbleActions {
             )
         }
     }
-    fun onKeypadChange(value: String) = _state.update { it.copy(keypadValue = value) }
-    fun onKeypadDone(money: Money?) {
+    override fun onKeypadChange(value: String) = _state.update { it.copy(keypadValue = value) }
+    override fun onKeypadDone(money: Money?) {
         _state.update { st ->
             val base = st.prices.getOrNull(st.selected)
             val prices = if (money != null && money.cents > 0 && base != null) {
@@ -336,7 +336,7 @@ class BubbleService : Service(), BubbleActions {
             st.copy(keypadOpen = false, prices = prices, selectedBillCents = null)
         }
     }
-    fun onKeypadClose() = _state.update { it.copy(keypadOpen = false) }
+    override fun onKeypadClose() = _state.update { it.copy(keypadOpen = false) }
 
     fun clearCart() = scope.launch {
         pendingUndo = PayLensApp.Graph.cart.clear()

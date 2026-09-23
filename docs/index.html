@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PayLens U — Escáner de precios HUD para Android de gama baja</title>
+  <meta name="description" content="Escáner de precios y calculadora financiera flotante para Android Go (1 GB RAM). OCR Tap-to-Scan, tasa BCV, pago mixto $/Bs y HUD OLED con neón. APK directo, sin Play Services." />
+  <meta property="og:title" content="PayLens U — Escáner de precios HUD" />
+  <meta property="og:description" content="OCR Tap-to-Scan < 100 ms percibidos, pago mixto $/Bs, burbuja flotante y HUD OLED. Hecho para Android Go." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23000'/%3E%3Cpath d='M30 22v34a20 20 0 0 0 40 0V22' fill='none' stroke='%2300F3FF' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M50 76v10' stroke='%239D00FF' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- Barra de progreso de scroll -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- Navegación -->
+  <header class="site-nav" id="top">
+    <div class="container nav-inner">
+      <a class="brand" href="#top">
+        <svg viewBox="0 0 100 100" class="brand-mark" aria-hidden="true">
+          <path d="M30 22v34a20 20 0 0 0 40 0V22" fill="none" stroke="var(--cyan)" stroke-width="9" stroke-linecap="round"/>
+          <path d="M50 76v10" stroke="var(--purple)" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+        PayLens <span class="brand-accent">U</span>
+      </a>
+      <nav class="nav-links" aria-label="Secciones">
+        <a href="#features">Funciones</a>
+        <a href="#strategy">Zero-Overhead</a>
+        <a href="#architecture">Arquitectura</a>
+        <a href="#matrix">Pago mixto</a>
+        <a href="#download">Descargar</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-ghost nav-cta" href="#download">Obtener APK</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <p class="hero-kicker reveal">Android Go · 1 GB RAM · OCR <span class="mono">Tap-to-Scan</span></p>
+        <h1 class="reveal">
+          Escanea un precio.<br />
+          <span class="grad-text">Cobra con precisión de centavos.</span>
+        </h1>
+        <p class="hero-sub reveal">
+          PayLens U es un escáner de precios con HUD OLED puro y burbuja flotante.
+          Sin Hilt, sin Room, sin frames perdidos: toda la app vive con menos de 50 MB de RAM
+          y procesa la cámara <strong>solo cuando tocas</strong>.
+        </p>
+        <div class="hero-actions reveal">
+          <a class="btn btn-primary" href="#download">
+            <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Descargar APK
+          </a>
+          <a class="btn btn-ghost" href="#features">Ver funciones</a>
+        </div>
+        <p class="hero-note reveal mono">minSdk 24 · Kotlin 2.0 · Compose · CameraX · ML Kit · sin Hilt/Room</p>
+
+        <div class="hero-stats reveal" role="list">
+          <div class="stat" role="listitem">
+            <span class="stat-num mono">&lt;100 ms</span>
+            <span class="stat-label">OCR percibido (tap → resultado)</span>
+            <span class="stat-bar"><i style="--w:18%"></i></span>
+          </div>
+          <div class="stat" role="listitem">
+            <span class="stat-num mono">&lt;50 MB</span>
+            <span class="stat-label">RAM en actividad (presupuesto)</span>
+            <span class="stat-bar"><i style="--w:26%"></i></span>
+          </div>
+          <div class="stat" role="listitem">
+            <span class="stat-num mono">2</span>
+            <span class="stat-label">draw calls para el neón (strokes planos)</span>
+            <span class="stat-bar"><i style="--w:8%"></i></span>
+            <span class="stat-tag">OLED #000000</span>
+          </div>
+          <div class="stat" role="listitem">
+            <span class="stat-num mono">0</span>
+            <span class="stat-label">frames perdidos · animaciones en graphicsLayer</span>
+            <span class="stat-bar"><i style="--w:4%"></i></span>
+          </div>
+        </div>
+
+        <!-- Mock de teléfono con HUD -->
+        <div class="phone-wrap reveal">
+          <div class="phone">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="hud">
+              <div class="hud-top">
+                <span class="chip chip-cyan">TASA BCV · 40,32</span>
+                <span class="chip chip-purple">CUENTA</span>
+              </div>
+              <div class="hud-reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <div class="hud-price mono">$12,50</div>
+              <div class="hud-conv mono">≈ 504,00 Bs <span class="dim">· IVA 16% incl.</span></div>
+              <div class="hud-row">
+                <span class="hud-k">EFECTIVO $</span><span class="hud-v mono">12,50</span>
+              </div>
+              <div class="hud-row hud-row-opt">
+                <span class="hud-k">PAGO MÓVIL</span><span class="hud-v mono">504,00 Bs</span>
+                <span class="hud-opt">ÓPTIMO</span>
+              </div>
+              <div class="hud-row">
+                <span class="hud-k">VUELTO</span><span class="hud-v mono">0,00</span>
+              </div>
+              <div class="hud-actions">
+                <span class="chip chip-cyan">+ CARRITO</span>
+                <span class="chip chip-purple">COBRAR</span>
+              </div>
+            </div>
+          </div>
+          <div class="bubble floating" aria-hidden="true">P</div>
+          <p class="phone-caption">HUD real de la app — negro absoluto, neón vectorial, matrix de pago.</p>
+        </div>
+      </div>
+      <div class="hero-glow" aria-hidden="true"></div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+      <div class="container">
+        <p class="kicker reveal">Funciones</p>
+        <h2 class="reveal">Todo lo que hace en <span class="grad-text">&lt;100 ms</span></h2>
+        <p class="section-sub reveal">Diseñado primero para el hardware más humilde: cada función justifica su coste en CPU, RAM y batería.</p>
+
+        <div class="grid-3">
+          <article class="card reveal">
+            <div class="card-ico">◎</div>
+            <h3>Tap-to-Scan</h3>
+            <p>La cámara no procesa nada entre toques. Al tocar, una ráfaga de 3 frames se evalúa por
+            <em>varianza de gradiente</em> del plano Y y solo el más nítido pasa al OCR (timeout 400 ms).</p>
+          </article>
+          <article class="card reveal">
+            <div class="card-ico">⇄</div>
+            <h3>Smart Regex ES/EN</h3>
+            <p>El símbolo manda: <span class="mono">$12.50</span>, <span class="mono">1.234,56 Bs</span>.
+            Sin símbolo, heurística por magnitud contra la tasa guardada y top-3 de precios tocables.</p>
+          </article>
+          <article class="card reveal">
+            <div class="card-ico">◫</div>
+            <h3>Burbuja flotante</h3>
+            <p>Servicio foreground con <span class="mono">TYPE_APPLICATION_OVERLAY</span>: head arrastrable de 84 dp ↔ panel
+            con mini-escáner y carrito sobre cualquier app.</p>
+          </article>
+          <article class="card reveal">
+            <div class="card-ico">⛁</div>
+            <h3>Carrito Express</h3>
+            <p>Sticky bar con pulso al cambiar totales, sheet deslizable, borrar/vaciar con deshacer y persistencia
+            en SQLite directo (sin Room).</p>
+          </article>
+          <article class="card reveal">
+            <div class="card-ico">¤</div>
+            <h3>Tasa BCV automática</h3>
+            <p>Auto-sync al abrir (dolarapi → pydolarve, timeout 3 s), offline-first con la última tasa guardada y fallback manual en Ajustes.</p>
+          </article>
+          <article class="card reveal">
+            <div class="card-ico">⛨</div>
+            <h3>Cobro e impuestos</h3>
+            <p>COBRAR asienta la transacción, aplica IVA contenido + <strong>IGTF 3%</strong> sobre efectivo $ y descuenta el saldo
+            de tu CUENTA, con historial.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ZERO-OVERHEAD -->
+    <section class="section section-alt" id="strategy">
+      <div class="container">
+        <p class="kicker reveal">Estrategia</p>
+        <h2 class="reveal">Zero-Overhead: presupuesto antes que features</h2>
+        <p class="section-sub reveal">Cuatro reglas que gobiernan cada línea de código de la app.</p>
+
+        <div class="budget-table reveal">
+          <div class="budget-row budget-head">
+            <span>Presupuesto</span><span>Técnica</span>
+          </div>
+          <div class="budget-row">
+            <span><strong class="mono">&lt;100 ms</strong> OCR percibido</span>
+            <span>Tap-to-Scan: CPU solo al tocar, ráfaga de 3 frames, el más nítido gana, OCR único con timeout.</span>
+          </div>
+          <div class="budget-row">
+            <span><strong class="mono">&lt;50 MB</strong> RAM</span>
+            <span>Dinero en <span class="mono">Long</span> centavos (nunca Double), DI manual, SQLite sin Room, bitmap gris ≤1080 px reciclado.</span>
+          </div>
+          <div class="budget-row">
+            <span><strong class="mono">OLED</strong> batería</span>
+            <span>Fondo <span class="mono">#000000</span> absoluto, status/nav bar negras, splash sin imagen.</span>
+          </div>
+          <div class="budget-row">
+            <span><strong class="mono">0</strong> frames perdidos</span>
+            <span>Neón = strokes planos (2 draw calls, sin blur ni RenderEffect); pulso de retícula solo en <span class="mono">graphicsLayer</span> (spring &lt;150 ms).</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARQUITECTURA -->
+    <section class="section" id="architecture">
+      <div class="container arch-grid">
+        <div class="arch-copy">
+          <p class="kicker reveal">Arquitectura</p>
+          <h2 class="reveal">Módulos sin magia</h2>
+          <p class="reveal">Cada paquete tiene una sola responsabilidad y cero dependencias circulares.
+          Dos flavors (<span class="mono">bundledOcr</span> / <span class="mono">thinOcr</span>) comparten el mismo
+          <span class="mono">OcrFactoryImpl</span>, así el resto del código nunca cambia.</p>
+          <ul class="checklist reveal">
+            <li>Dinero con <span class="mono">Long</span> centavos y redondeo half-up — exactitud contable.</li>
+            <li>Parser ES/EN con heurística $/Bs y cotas de sanidad (descarta códigos largos y fechas).</li>
+            <li>Matrix de pago mixto compartida entre UI y cobro: <em>lo que ves es lo que se asienta</em>.</li>
+            <li>CameraX 720p + <span class="mono">FramePrepper</span> Y→gris con métrica de nitidez.</li>
+          </ul>
+          <div class="arch-actions reveal">
+            <a class="btn btn-ghost" href="https://github.com/LiebeBlack/ultimate" target="_blank" rel="noopener">
+              Ver el código en GitHub
+            </a>
+          </div>
+        </div>
+        <div class="terminal reveal" aria-label="Estructura de módulos">
+          <div class="terminal-bar"><i></i><i></i><i></i><span class="mono">app/src/main/java/com/paylensu/</span></div>
+          <pre class="mono"><code>├── core/       Money · ExchangeRate
+├── parser/     PriceParser (smart regex + heurística)
+├── finance/    PriceMath (IVA) · MixedPayment (matrix)
+├── data/       CartDb (SQLite) · RateStore · RateSync (BCV)
+├── camera/     CameraController · FramePrepper
+├── ocr/        OcrEngine/OcrClient + factories por flavor
+├── hud/        Tema OLED, retícula spring, ResultCard…
+├── overlay/    BubbleService (foreground + overlay)
+└── ui/         ScannerScreen · SettingsScreen · AppRoot</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGO MIXTO -->
+    <section class="section section-alt" id="matrix">
+      <div class="container">
+        <p class="kicker reveal">Finanzas de cobro</p>
+        <h2 class="reveal">La matrix de <span class="grad-text">pago mixto</span></h2>
+        <p class="section-sub reveal">Para cada billete ($1…$100 + monto libre): efectivo aplicado, resto en Pago Móvil Bs a la tasa BCV y vuelto exacto en $ y Bs. La fila óptima es el <strong>mayor billete que cubre sin exceder</strong> el total.</p>
+
+        <div class="demo">
+          <div class="demo-controls reveal">
+            <label class="demo-label">Total:
+              <input type="range" id="totalRange" min="1" max="120" value="27" step="1" />
+              <output class="mono" id="totalOut">$27,00</output>
+            </label>
+            <label class="demo-label">Tasa BCV:
+              <input type="range" id="rateRange" min="1" max="200" value="40" step="0.5" />
+              <output class="mono" id="rateOut">40,00</output>
+            </label>
+            <button class="btn btn-ghost btn-sm" id="resetDemo" type="button">Restablecer</button>
+          </div>
+          <div class="table-wrap reveal">
+            <table class="pay-table" aria-live="polite">
+              <thead>
+                <tr><th>Billete</th><th>Efectivo $</th><th>Pago Móvil</th><th>Vuelto $</th><th>Vuelto Bs</th><th></th></tr>
+              </thead>
+              <tbody id="payTableBody"><!-- JS --></tbody>
+            </table>
+          </div>
+          <p class="demo-note reveal">Demo interactiva con la misma lógica de <span class="mono">MixedPayment</span>: fila óptima resaltada; los sobrepagos nunca son óptimos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESCARGA -->
+    <section class="section" id="download">
+      <div class="container">
+        <p class="kicker reveal">Descargar</p>
+        <h2 class="reveal">APK directo, sin Play Services</h2>
+        <p class="section-sub reveal">Dos sabores según tu dispositivo. El bundled incluye el modelo OCR Latin (~6 MB) dentro del APK y funciona sin Google Play Services.</p>
+
+        <div class="grid-2">
+          <article class="card download-card reveal">
+            <div class="card-ico">⬢</div>
+            <h3>PayLens U · bundledOcr</h3>
+            <p>OCR completo incluido (modelo Latin ~6 MB). Recomendado para equipos <strong>sin Google Play Services</strong> o cuando quieres el arranque más predecible.</p>
+            <a class="btn btn-primary" href="https://github.com/LiebeBlack/ultimate/releases/latest" target="_blank" rel="noopener">Última release (bundled)</a>
+            <p class="card-meta mono">minSdk 24 · Android 7.0+</p>
+          </article>
+          <article class="card download-card reveal">
+            <div class="card-ico">◇</div>
+            <h3>PayLens U · thinOcr</h3>
+            <p>APK mínimo: el OCR lo resuelve Google Play Services (<span class="mono">play-services-mlkit</span>). Ideal si ya tienes GMS actualizado y quieres el menor peso.</p>
+            <a class="btn btn-ghost" href="https://github.com/LiebeBlack/ultimate/releases/latest" target="_blank" rel="noopener">Última release (thin)</a>
+            <p class="card-meta mono">minSdk 24 · requiere GMS</p>
+          </article>
+        </div>
+
+        <div class="build-box reveal">
+          <p class="build-title mono">$ compilar desde código</p>
+          <pre class="mono"><code># OCR incluido en el APK (~6 MB de modelo)
+./gradlew :app:assembleBundledOcrDebug
+
+# OCR thin vía Play Services (APK mínimo)
+./gradlew :app:assembleThinOcrDebug
+
+# Tests JVM (parser, Money, finanzas, carrito)
+./gradlew testBundledOcrDebugUnitTest</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section-alt" id="faq">
+      <div class="container">
+        <p class="kicker reveal">FAQ</p>
+        <h2 class="reveal">Preguntas frecuentes</h2>
+
+        <div class="faq-list">
+          <details class="faq reveal">
+            <summary>¿Por qué la app solo procesa la cámara al tocar?</summary>
+            <p>Es el corazón del presupuesto de batería y CPU en Android Go. Un analyzer de <span class="mono">ImageAnalysis</span> continuo adquiere buffers constantemente; al dejarlo sin analyzer entre toques, el uso de CPU en reposo es cero y la ráfaga de 3 frames al tocar garantiza nitidez sin calentar el dispositivo.</p>
+          </details>
+          <details class="faq reveal">
+            <summary>¿Funciona sin Google Play Services?</summary>
+            <p>Sí, con el sabor <span class="mono">bundledOcr</span>: el modelo Latin de ML Kit (~6 MB) viaja dentro del APK y el reconocimiento es 100% local. El sabor <span class="mono">thinOcr</span> delega el OCR en Play Services para minimizar el APK.</p>
+          </details>
+          <details class="faq reveal">
+            <summary>¿Qué pasa si la tasa BCV no se puede sincronizar?</summary>
+            <p>La app es offline-first: usa la última tasa guardada y siempre puedes fijarla manualmente en Ajustes, junto al umbral $/Bs para la heurística cuando el precio no tiene símbolo.</p>
+          </details>
+          <details class="faq reveal">
+            <summary>¿La burbuja funciona sobre apps bancarias?</summary>
+            <p>Sobre apps con <span class="mono">FLAG_SECURE</span> (varios bancos) el sistema bloquea lo que hay detrás de la burbuja; la calculadora manual y el carrito siguen operativos.</p>
+          </details>
+          <details class="faq reveal">
+            <summary>¿Cómo se calculan los impuestos al cobrar?</summary>
+            <p>Los impuestos a cobrar suman el IVA contenido en el total más el <strong>IGTF 3%</strong> sobre la parte pagada en efectivo $. La misma fórmula vive en la UI y en el cobro, así el asiento contable coincide siempre con lo mostrado.</p>
+          </details>
+          <details class="faq reveal">
+            <summary>¿Cómo se publica una release firmada?</summary>
+            <p>Se pushea un tag <span class="mono">v*</span> (p. ej. <span class="mono">v1.0.0</span>) y el workflow de release compila AAB+APK, firma con los secrets <span class="mono">KEYSTORE_B64</span> / <span class="mono">KEYSTORE_PROPERTIES</span> y publica el GitHub Release.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-final">
+      <div class="container">
+        <h2 class="reveal">Precios exactos.<br /><span class="grad-text">Cero overhead.</span></h2>
+        <p class="reveal">Hecho para los teléfonos que otros olvidan: 1 GB RAM, quad-core, OLED.</p>
+        <a class="btn btn-primary btn-lg reveal" href="#download">Descargar PayLens U</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="mono">PayLens U · v1.0.0 · Kotlin 2.0 · Compose · CameraX · ML Kit</p>
+      <p class="footer-links">
+        <a href="https://github.com/LiebeBlack/ultimate" target="_blank" rel="noopener">GitHub</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://github.com/LiebeBlack/ultimate/releases" target="_blank" rel="noopener">Releases</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://github.com/LiebeBlack/ultimate/blob/main/README.md" target="_blank" rel="noopener">Docs</a>
+        <span aria-hidden="true">·</span>
+        <span class="dim">LiebeBlack</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

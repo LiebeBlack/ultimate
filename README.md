@@ -59,6 +59,20 @@ El chip **BURBUJA** abre el permiso *Mostrar sobre otras apps* y lanza un servic
 
 Auto-sync al abrir (dolarapi → pydolarve, timeout 3 s, cascada) con la última tasa guardada como offline-first. La tasa también se puede fijar manualmente en Ajustes.
 
+## Web del proyecto (docs/)
+
+El directorio `docs/` contiene la landing page oficial (HTML/CSS/JS puro, sin build step) con la identidad OLED/neón de la app:
+
+```bash
+# Servir localmente para probar
+python -m http.server 8734 --directory docs
+# → http://127.0.0.1:8734
+```
+
+### Publicar en GitHub Pages
+
+En **Settings → Pages** del repo, elige *Deploy from a branch* → rama `main` → carpeta **`/docs`**. La web quedará en `https://<usuario>.github.io/ultimate/` y se actualiza con cada push a `main`.
+
 ## CI/CD y releases
 
 - **CI** (`.github/workflows/ci.yml`): en cada push/PR corre los unit tests y compila `bundledOcr` (debug+release) y `thinOcr` (debug). Sube los APK como artefacto.

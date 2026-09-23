@@ -50,7 +50,7 @@ class RateStore(private val context: Context) {
                 )
             },
             ivaPercent = (p[K.IVA] ?: 16).toLong(),
-            thresholdUsdCents = (p[K.THRESHOLD] ?: 20_00),
+            thresholdUsdCents = (p[K.THRESHOLD] ?: 20_00).toLong(),
             ocrEngineError = p[K.OCR_ERROR],
         )
     }
